@@ -31,7 +31,6 @@ class AddBussinessDaysTest extends \PHPUnit\Framework\TestCase
     {
         $fecha = CarbonColombia::create(2018,12,28);
 
-
         $fecha->addBussinessDays(10);
 
         $this->assertEquals('2019-01-15',$fecha->toDateString());
