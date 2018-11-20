@@ -20,13 +20,13 @@ $fields = [
 $values = [];
 
 $replacements = [
-    'torreswil\\\\carbon_colombia\\\\' => function () use(&$values) { return str_replace('\\', '\\\\', $values['psr4_namespace']) . '\\\\'; },
+    'torreswil\\\\CarbonColombia\\\\' => function () use(&$values) { return str_replace('\\', '\\\\', $values['psr4_namespace']) . '\\\\'; },
     'Wilfredo Torres'                 => function () use(&$values) { return $values['author_name']; },
     ':author_username'             => function () use(&$values) { return $values['author_github_username']; },
     ':author_website'              => function () use(&$values) { return $values['author_website'] ?: ('https://github.com/' . $values['author_github_username']); },
     'wtorresariza@gmail.com'                => function () use(&$values) { return $values['author_email'] ?: ($values['author_github_username'] . '@example.com'); },
     'torreswil'                      => function () use(&$values) { return $values['package_vendor']; },
-    'carbon_colombia'                => function () use(&$values) { return $values['package_name']; },
+    'CarbonColombia'                => function () use(&$values) { return $values['package_name']; },
     'Tratar Festivos con Carbon'         => function () use(&$values) { return $values['package_description']; },
     'League\\Skeleton'             => function () use(&$values) { return $values['psr4_namespace']; },
 ];

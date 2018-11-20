@@ -1,12 +1,12 @@
 {
-    "name": "torreswil/carbon_colombia",
+    "name": "torreswil/CarbonColombia",
     "type": "library",
     "description": "Extension de nesbot/carbon, para trabajar con festivos de Colombia",
     "keywords": [
         "torreswil",
-        "carbon_colombia"
+        "CarbonColombia"
     ],
-    "homepage": "https://github.com/torreswil/carbon_colombia",
+    "homepage": "https://github.com/torreswil/CarbonColombia",
     "license": "MIT",
     "authors": [
         {
