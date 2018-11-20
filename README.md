@@ -48,7 +48,7 @@ If you discover any security related issues, please email wtorresariza@gmail.com
 ## Credits
 
 - [Wilfredo Torres][link-author]
-- [All Contributors][link-contributors]
+- Inspirado en: [luisplata/DiasFestivosColombia][link-contributors]
 
 ## License
 
@@ -67,4 +67,4 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 [link-code-quality]: https://scrutinizer-ci.com/g/torreswil/carbon-colombia
 [link-downloads]: https://packagist.org/packages/torreswil/carbon-colombia
 [link-author]: https://github.com/:author_username
-[link-contributors]: ../../contributors
+[link-contributors]: https://github.com/luisplata/DiasFestivosColombia
