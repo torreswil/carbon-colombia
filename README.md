@@ -21,7 +21,7 @@ $ composer require torreswil/carbon-colombia
 ## Usage
 
 ``` php
-$fecha = carbon-colombia::create(2019,04,16);
+$fecha = CarbonColombia::create(2019,04,16);
 $fecha->addBussinessDays(5);
 echo $fecha->toDateString();
 //imprime 2019-04-25
