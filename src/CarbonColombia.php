@@ -15,15 +15,15 @@ class CarbonColombia extends Carbon
 {
 
 
-    protected $festivos = [];
+    protected $year_holidays = [];
 
-    protected $mes_pascua;
-    protected $dia_pascua;
+    protected $easter_month;
+    protected $easter_day;
 
     public function __construct($time = null, $tz = null)
     {
         parent::__construct($time, $tz);
-        $this->calcularFestivos();
+        $this->setYearHolidays();
 
     }
 
@@ -32,25 +32,56 @@ class CarbonColombia extends Carbon
         while ($days)
         {
             $this->addWeekday();
-            print $this->toDateString().' - ';
-            if($this->esFestivo()) {
-                continue;
-            }
+
+            if($this->isHoliday()) continue;
 
             $days--;
         }
     }
 
-    public function getFestivos(){
-        return $this->festivos;
+    public function diffInBussinessDays($date = null, $absolute = true)
+    {
+        $factor = ($this->greaterThan($date) && !$absolute) ? -1 : 1;
+
+
+        $week_days = $this->diffInWeekdays($date);
+
+        $holidays = $this->holidaysBetween($date);
+
+        $days = $week_days - $holidays;
+
+        return $days * $factor;
+
     }
 
-    protected function calcularFestivos()
-    {
-        $this->festivos = ['01-01','05-01','07-20','08-07','12-08','12-25'];
+    public function holidaysBetween($date){
+        $oldest_date = $this->greaterThan($date) ? $date : $this;
+        $newer_date = $this->greaterThan($date) ? $this : $date;
 
-        $this->mes_pascua = date('m',easter_date($this->year));
-        $this->dia_pascua = date('d',easter_date($this->year));
+        $holidays = 0;
+
+        while ($newer_date->greaterThan($oldest_date))
+        {
+            $oldest_date->addWeekday();
+
+            if($oldest_date->isHoliday()) $holidays++;
+
+        }
+
+        return $holidays;
+
+    }
+
+    public function getYearHolidays(){
+        return $this->year_holidays;
+    }
+
+    protected function setYearHolidays()
+    {
+        $this->year_holidays = ['01-01','05-01','07-20','08-07','12-08','12-25'];
+
+        $this->easter_month = date('m',easter_date($this->year));
+        $this->easter_day = date('d',easter_date($this->year));
         $this->calcula_emiliani(1, 6);				// Reyes Magos Enero 6
         $this->calcula_emiliani(3, 19);				// San Jose Marzo 19
         $this->calcula_emiliani(6, 29);				// San Pedro y San Pablo Junio 29
@@ -68,58 +99,58 @@ class CarbonColombia extends Carbon
 
     }
 
-    private function calcula_emiliani($mes_festivo,$dia_festivo)
+    private function calcula_emiliani($mes_festivo,$holiday)
     {
         // funcion que mueve una fecha diferente a lunes al siguiente lunes en el
         // calendario y se aplica a fechas que estan bajo la ley emiliani
-        //global  $y,$dia_festivo,$mes_festivo,$festivo;
+        //global  $y,$holiday,$mes_festivo,$festivo;
         // Extrae el dia de la semana
         // 0 Domingo … 6 Sábado
-        $dd = date("w",mktime(0,0,0,$mes_festivo,$dia_festivo,$this->year));
+        $dd = date("w",mktime(0,0,0,$mes_festivo,$holiday,$this->year));
         switch ($dd) {
             case 0:                                    // Domingo
-                $dia_festivo = $dia_festivo + 1;
+                $holiday = $holiday + 1;
                 break;
             case 2:                                    // Martes.
-                $dia_festivo = $dia_festivo + 6;
+                $holiday = $holiday + 6;
                 break;
             case 3:                                    // Miércoles
-                $dia_festivo = $dia_festivo + 5;
+                $holiday = $holiday + 5;
                 break;
             case 4:                                     // Jueves
-                $dia_festivo = $dia_festivo + 4;
+                $holiday = $holiday + 4;
                 break;
             case 5:                                     // Viernes
-                $dia_festivo = $dia_festivo + 3;
+                $holiday = $holiday + 3;
                 break;
             case 6:                                     // Sábado
-                $dia_festivo = $dia_festivo + 2;
+                $holiday = $holiday + 2;
                 break;
         }
-        $fest = date("m-d", mktime(0,0,0,$mes_festivo,$dia_festivo,$this->year));
-        array_push($this->festivos,$fest);
+        $fest = date("m-d", mktime(0,0,0,$mes_festivo,$holiday,$this->year));
+        array_push($this->year_holidays,$fest);
 
     }
 
     private function pascuas($cantidadDias=0,$siguienteLunes=false)
     {
-        $mes_festivo = date("n", mktime(0,0,0,$this->mes_pascua,$this->dia_pascua+$cantidadDias,$this->year));
-        $dia_festivo = date("d", mktime(0,0,0,$this->mes_pascua,$this->dia_pascua+$cantidadDias,$this->year));
+        $mes_festivo = date("n", mktime(0,0,0,$this->easter_month,$this->easter_day+$cantidadDias,$this->year));
+        $holiday = date("d", mktime(0,0,0,$this->easter_month,$this->easter_day+$cantidadDias,$this->year));
 
         if ($siguienteLunes)
         {
-            $this->calcula_emiliani($mes_festivo, $dia_festivo);
+            $this->calcula_emiliani($mes_festivo, $holiday);
         }
         else
         {
-            $fest = date("m-d", mktime(0,0,0,$mes_festivo,$dia_festivo,$this->year));
-            array_push($this->festivos,$fest);
+            $fest = date("m-d", mktime(0,0,0,$mes_festivo,$holiday,$this->year));
+            array_push($this->year_holidays, $fest);
         }
     }
 
-    public function esFestivo()
+    public function isHoliday()
     {
-        $this->calcularFestivos();
-        return in_array($this->format('m-d'),$this->festivos);
+        $this->getYearHolidays();
+        return in_array($this->format('m-d'),$this->year_holidays);
     }
 }
