@@ -25,6 +25,11 @@ $fecha = carbon-colombia::create(2019,04,16);
 $fecha->addBussinessDays(5);
 echo $fecha->toDateString();
 //imprime 2019-04-25
+
+$fecha = CarbonColombia::create(2019,04,16);
+$fecha2 = CarbonColombia::create(2019,04,25);
+echo $fecha->diffInBussinessDays($fecha2);
+//imprime 5
 ```
 
 ## Change log
