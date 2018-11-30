@@ -35,4 +35,13 @@ class AddBussinessDaysTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('2019-01-15',$fecha->toDateString());
     }
+
+    public function testFromFormat()
+    {
+        $fecha = CarbonColombia::createFromFormat('Y-m-d','2019-04-16');
+
+        $fecha->addBussinessDays(5);
+
+        $this->assertEquals('2019-04-25',$fecha->toDateString());
+    }
 }
